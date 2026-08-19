@@ -6,6 +6,9 @@
 #include "Character/WarriorBaseCharacter.h"
 #include "WarriorHeroCharacter.generated.h"
 
+class UCameraComponent;
+class USpringArmComponent;
+
 /**
  * 
  */
@@ -19,4 +22,13 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
+	
+private:
+	//~ Begin Component
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USpringArmComponent> CameraBoom;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UCameraComponent> FollowCamera;
+	//~ End Component
 };
