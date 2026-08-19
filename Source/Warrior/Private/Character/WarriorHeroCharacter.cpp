@@ -4,8 +4,12 @@
 #include "Character/WarriorHeroCharacter.h"
 
 #include "DebugHelper.h"
+#include "EnhancedInputSubsystems.h"
+#include "WarriorGameplayTag.h"
 #include "Camera/CameraComponent.h"
+#include "Component/Input/WarriorInputComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "DataAsset/Input/DataAsset_InputConfig.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
@@ -38,4 +42,38 @@ void AWarriorHeroCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	Debug::Print(TEXT("Hello"));
+}
+
+void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	check(InputConfigDataAsset);
+	
+	ULocalPlayer* LocalPlayer = GetController<APlayerController>()->GetLocalPlayer();
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
+	check(Subsystem);
+	Subsystem->AddMappingContext(InputConfigDataAsset->DefaultMappingContext, 0);
+	
+	UWarriorInputComponent* WarriorInputComponent = CastChecked<UWarriorInputComponent>(PlayerInputComponent);
+	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTag::Input_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
+	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTag::Input_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
+}
+
+void AWarriorHeroCharacter::Input_Move(const FInputActionValue& InputActionValue)
+{
+	const FVector2D MovementVector = InputActionValue.Get<FVector2D>();
+	const FRotator Rotation = FRotator(0.f, GetControlRotation().Yaw, 0.f);
+	
+	const FVector ForwardDirection = FRotationMatrix(Rotation).GetUnitAxis(EAxis::X);
+	const FVector RightDirection = FRotationMatrix(Rotation).GetUnitAxis(EAxis::Y);
+	
+	AddMovementInput(ForwardDirection, MovementVector.Y);
+	AddMovementInput(RightDirection, MovementVector.X);
+}
+
+void AWarriorHeroCharacter::Input_Look(const FInputActionValue& InputActionValue)
+{
+	const FVector2D LookAxisVector = InputActionValue.Get<FVector2D>();
+	AddControllerYawInput(LookAxisVector.X);
+	AddControllerPitchInput(LookAxisVector.Y);
 }
