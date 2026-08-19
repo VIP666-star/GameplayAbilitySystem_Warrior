@@ -13,6 +13,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
+
 AWarriorHeroCharacter::AWarriorHeroCharacter()
 {
 	GetCapsuleComponent()->InitCapsuleSize(36.f, 96.f);
@@ -37,11 +38,17 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	FollowCamera->bUsePawnControlRotation = false;
 }
 
+void AWarriorHeroCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+	Debug::Print(TEXT("AbilitySystemComponent & AttributeSet"));
+}
+
 void AWarriorHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Debug::Print(TEXT("Hello"));
 }
 
 void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

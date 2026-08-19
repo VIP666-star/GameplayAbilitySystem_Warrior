@@ -23,6 +23,10 @@ public:
 	AWarriorHeroCharacter();
 	
 protected:
+	//~ Begin APawn interface
+	virtual void PossessedBy(AController* NewController) override;
+	//~ End APawn interface
+	
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	
