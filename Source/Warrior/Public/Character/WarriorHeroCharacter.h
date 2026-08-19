@@ -46,5 +46,18 @@ private:
 	
 	void Input_Move(const FInputActionValue& InputActionValue);
 	void Input_Look(const FInputActionValue& InputActionValue);
+	void Input_ToggleMove();
 	//~ End Input
+	
+	
+	//~ Begin HeroData
+	UPROPERTY(VisibleDefaultsOnly, Category = "HeroData")
+	bool bShouldToggleMoveToWalk = false;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "HeroData")
+	float WalkSpeed = 200.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "HeroData")
+	float RunSpeed = 600.f;
+	//~ End HeroData
 };

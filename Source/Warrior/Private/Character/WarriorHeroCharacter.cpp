@@ -10,6 +10,7 @@
 #include "Component/Input/WarriorInputComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "DataAsset/Input/DataAsset_InputConfig.h"
+#include "DataAsset/StartUpData/DataAsset_StartUpDataBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
@@ -42,7 +43,11 @@ void AWarriorHeroCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 	
-	Debug::Print(TEXT("AbilitySystemComponent & AttributeSet"));
+	if (!CharacterStartUpData.IsNull())
+	{
+		UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.LoadSynchronous();
+		LoadedData->GiveToAbilitySystemComponent(WarriorAbilitySystemComponent);
+	}
 }
 
 void AWarriorHeroCharacter::BeginPlay()
@@ -64,6 +69,7 @@ void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	UWarriorInputComponent* WarriorInputComponent = CastChecked<UWarriorInputComponent>(PlayerInputComponent);
 	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTag::Input_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
 	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTag::Input_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
+	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTag::Input_ToggleMove, ETriggerEvent::Started, this, &ThisClass::Input_ToggleMove);
 }
 
 void AWarriorHeroCharacter::Input_Move(const FInputActionValue& InputActionValue)
@@ -83,4 +89,19 @@ void AWarriorHeroCharacter::Input_Look(const FInputActionValue& InputActionValue
 	const FVector2D LookAxisVector = InputActionValue.Get<FVector2D>();
 	AddControllerYawInput(LookAxisVector.X);
 	AddControllerPitchInput(LookAxisVector.Y);
+}
+
+void AWarriorHeroCharacter::Input_ToggleMove()
+{
+	bShouldToggleMoveToWalk = !bShouldToggleMoveToWalk;
+	if (bShouldToggleMoveToWalk)
+	{
+		// Switch to walk
+		GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	}
+	else
+	{
+		// Switch to run
+		GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+	}
 }
