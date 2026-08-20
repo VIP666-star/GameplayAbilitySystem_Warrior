@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "WarriorType/WarriorStructType.h"
 #include "Weapon/WarriorWeaponBase.h"
 #include "WarriorHeroWeapon.generated.h"
 
@@ -14,4 +15,7 @@ class WARRIOR_API AWarriorHeroWeapon : public AWarriorWeaponBase
 {
 	GENERATED_BODY()
 	
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WeaponData")
+	FWarriorHeroWeaponData HeroWeaponData;
 };
