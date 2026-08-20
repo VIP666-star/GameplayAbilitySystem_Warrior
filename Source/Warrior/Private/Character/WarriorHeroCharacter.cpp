@@ -6,6 +6,7 @@
 #include "DebugHelper.h"
 #include "EnhancedInputSubsystems.h"
 #include "WarriorGameplayTag.h"
+#include "AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Component/Input/WarriorInputComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -73,6 +74,8 @@ void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTag::Input_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
 	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTag::Input_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
 	WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTag::Input_ToggleMove, ETriggerEvent::Started, this, &ThisClass::Input_ToggleMove);
+	
+	WarriorInputComponent->BindAbilityInputAction(InputConfigDataAsset, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 }
 
 void AWarriorHeroCharacter::Input_Move(const FInputActionValue& InputActionValue)
@@ -107,4 +110,14 @@ void AWarriorHeroCharacter::Input_ToggleMove()
 		// Switch to run
 		GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
 	}
+}
+
+void AWarriorHeroCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag)
+{
+	WarriorAbilitySystemComponent->OnAbilityInputPressed(InInputTag);
+}
+
+void AWarriorHeroCharacter::Input_AbilityInputReleased(FGameplayTag InInputTag)
+{
+	WarriorAbilitySystemComponent->OnAbilityInputReleased(InInputTag);
 }
