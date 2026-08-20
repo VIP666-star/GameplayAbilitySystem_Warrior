@@ -12,4 +12,9 @@ namespace WarriorGameplayTag
 	WARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Look);
 	WARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_ToggleMove);
 	
+	
+	/** Player Tag **/
+	
+	WARRIOR_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Weapon_Sword);
+	
 }

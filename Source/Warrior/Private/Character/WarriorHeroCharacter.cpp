@@ -13,6 +13,7 @@
 #include "DataAsset/StartUpData/DataAsset_StartUpDataBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Component/HeroCombatComponent.h"
 
 
 AWarriorHeroCharacter::AWarriorHeroCharacter()
@@ -37,6 +38,8 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>("FollowCamera");
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+	
+	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>("HeroCombatComponent");
 }
 
 void AWarriorHeroCharacter::PossessedBy(AController* NewController)

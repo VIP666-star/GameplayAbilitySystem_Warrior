@@ -12,4 +12,8 @@ namespace WarriorGameplayTag
 	UE_DEFINE_GAMEPLAY_TAG(Input_ToggleMove, "Input.ToggleMove");
 	
 	
+	/** Player Tag **/
+	
+	UE_DEFINE_GAMEPLAY_TAG(Player_Weapon_Sword, "Player.Weapon.Sword");
+	
 }
