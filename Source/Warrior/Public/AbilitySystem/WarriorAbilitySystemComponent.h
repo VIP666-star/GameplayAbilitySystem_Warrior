@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
+#include "WarriorType/WarriorStructType.h"
 #include "WarriorAbilitySystemComponent.generated.h"
 
 /**
@@ -18,4 +19,6 @@ public:
 	void OnAbilityInputPressed(FGameplayTag InInputTag);
 	void OnAbilityInputReleased(FGameplayTag InInputTag);
 	
+	UFUNCTION(BlueprintCallable, Category = "Warrior|Ability", meta = (ApplyLevel = "1"))
+	void GrantHeroWeaponAbilities(const TArray<FWarriorHeroAbilitySet>& InDefaultWeaponAbilities, int32 ApplyLevel, TArray<FGameplayAbilitySpecHandle>& OutAbilitySpecHandles);
 };
